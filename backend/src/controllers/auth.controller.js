@@ -37,7 +37,7 @@ const registerController = async (req, res) => {
       data: user,
     });
   } catch (err) {
-    res.json(err.message);
+    res.json({message: err.message});
   }
 };
 
@@ -54,13 +54,13 @@ const loginController = async (req, res) => {
     const user = await userModal.findOne({ email });
 
     if (!user) {
-      throw new Error("User do not exist");
+      return res.status(401).json({message: "User do not exist"});
     }
 
     const hashpassword = await bcrypt.compare(password, user.password);
 
     if (!hashpassword) {
-      throw new Error("Incorrect Password");
+      return res.status(401).json({message: "Incorrect Password"});
     }
 
     const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
@@ -69,10 +69,10 @@ const loginController = async (req, res) => {
 
     res.json({
       message: "Login done",
-      data: user.username,
+      data: user,
     });
   } catch (err) {
-    res.json(err.message);
+    res.status(500).json({message: err.message});
   }
 };
 
