@@ -77,5 +77,29 @@ router.get("/prompts", authMiddleware, async (req, res) => {
   }
 });
 
+// DELETE /prompts/:id
+router.delete("/prompts/delete/:id",authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Assuming you have authentication middleware that sets req.user
+    const prompt = await Prompt.findById(id);
+    if (!prompt) {
+      return res.status(404).json({ message: "Prompt not found" });
+    }
+
+    // Check ownership (or admin rights)
+    if (prompt.ownerId.toString() !== req.user.id && !req.user.isAdmin) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await prompt.deleteOne();
+    res.json({ message: "Prompt deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 module.exports = router;

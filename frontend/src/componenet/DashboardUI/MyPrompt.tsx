@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import CategoryDropDown from "../CategoryDropDown";
+import { Trash2, } from "lucide-react";
 
 interface Prompt {
   _id: string;
@@ -44,6 +45,21 @@ const MyPrompts = () => {
       setLoading(false);
     }
   }, [scope, limit, page, category]);
+
+  const handleDelete = async (id: string) => {
+
+    if (!window.confirm("Are you sure you want to delete this prompt?")) {
+      return;
+    }
+    try {
+      await axios.delete(`http://localhost:3000/prompts/delete/${id}`, {
+        withCredentials: true,
+      });
+      setPrompts((prev) => prev.filter((prompt) => prompt._id !== id));
+    } catch (err) {
+      console.error("Error deleting prompt", err);
+    }
+  };
 
   useEffect(() => {
     fetchPrompts();
@@ -300,9 +316,14 @@ const MyPrompts = () => {
                 onClick={() => setSelectedPrompt(prompt)}
                 className="bg-white rounded-lg shadow-md p-3 border border-gray-100 cursor-pointer hover:shadow-lg transition-all"
               >
-                <h3 className="text-base font-bold text-[#432DD7]">
-                  {prompt.title}
-                </h3>
+                <div className="flex justify-between items-start">
+
+                  <h3 className="text-base font-bold text-[#432DD7]">
+                    {prompt.title}
+                  </h3>
+                  <button className="cursor-pointer" onClick={(e) =>{ e.stopPropagation(); handleDelete(prompt._id)}}><Trash2 size={16} color="red"/></button>
+                </div>
+
                 <div className="mt-1 text-xs text-gray-500">
                   {prompt.category} | {prompt.type}
                 </div>
