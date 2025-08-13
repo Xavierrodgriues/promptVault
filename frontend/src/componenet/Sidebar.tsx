@@ -58,8 +58,8 @@ const Sidebar = () => {
      
       navigate("/");
       setIsOpen(false);
-    } catch (error: any) {
-      if (error.response) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message || "Error occurred");
       } else {
         toast.error("Network error");

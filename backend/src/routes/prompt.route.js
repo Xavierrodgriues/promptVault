@@ -39,30 +39,27 @@ router.post("/prompt/add", authMiddleware, async (req, res) => {
 
 router.get("/prompts", authMiddleware, async (req, res) => {
   try {
-    const { scope, category, type, limit = 10, page = 1 } = req.query;
+    const { scope, category, page = 1 } = req.query;
+    let { limit = 6 } = req.query;
+
+    // Convert limit to number and clamp it to max 6
+    limit = Math.min(Number(limit) || 6, 6);
+
     const filter = {};
 
     if (scope === "personal") {
-      // Only prompts created by the current user
       filter.ownerId = req.user._id;
     } else if (scope === "community") {
-      // Only prompts of type "community"
       filter.type = "community";
     }
 
-    // Apply category filter if provided
     if (category) {
-      filter.category = new RegExp(`^${category}`, "i"); // starts with
-    }
-
-    // Apply type filter if provided, but don't override the community restriction
-    if (type && !(scope === "community" && type === "community")) {
-      filter.type = type;
+      filter.category = new RegExp(`^${category}`, "i");
     }
 
     const prompts = await Prompt.find(filter)
       .populate("ownerId", "username email")
-      .limit(Number(limit))
+      .limit(limit)
       .skip((page - 1) * limit)
       .sort({ createdAt: -1 });
 

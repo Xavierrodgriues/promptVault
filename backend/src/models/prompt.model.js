@@ -21,7 +21,7 @@ const PromptScehma = new mongoose.Schema({
     },
     category: {
       type: String,
-      enum: ["Marketing", "Social Media", "Coding", "Email", "Education", "Design", "Personal", "Business", "Other"],
+      enum: ["Marketing", "Social Media", "Coding", "Email", "Education", "Design", "Personal", "Business", "Medical","Other"],
       required: true,
     },
     type: {
