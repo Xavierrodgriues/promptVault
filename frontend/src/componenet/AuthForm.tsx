@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const AuthForm = () => {
   const [loginForm, setLoginForm] = useState(true);
@@ -14,14 +15,14 @@ const AuthForm = () => {
       : "http://localhost:3000/auth/register";
     try {
       const response = await axios.post(url, data, { withCredentials: true });
-      alert(response.data.message);
+      toast.success(response.data.message);
       localStorage.setItem("user", JSON.stringify(response.data.data));
       navigate("/dashboard");
     } catch (error: any) {
       if (error.response) {
-        alert(error.response.data.message || "Error occurred");
+        toast.error(error.response.data.message || "Error occurred");
       } else {
-        alert("Network error");
+        toast.error("Network error");
       }
     }
   };

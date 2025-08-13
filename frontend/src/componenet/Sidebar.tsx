@@ -1,18 +1,71 @@
 import { useState } from "react";
-import { Home, Users, ClipboardList, BarChart2, Calendar, Settings, Menu, X } from "lucide-react";
-import { NavLink } from "react-router"; // use react-router-dom here
+import {
+  Home,
+  Users,
+  ClipboardList,
+  BarChart2,
+  Calendar,
+  Settings,
+  Menu,
+  X,
+} from "lucide-react";
+import { NavLink, useNavigate } from "react-router"; // use react-router-dom here
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
     { label: "Dashboard", icon: <Home size={18} />, path: "/dashboard" },
-    { label: "Recruitment", icon: <Users size={18} />, path: "/dashboard/recruitment" },
-    { label: "Onboarding", icon: <ClipboardList size={18} />, path: "/dashboard/onboarding" },
-    { label: "Reports", icon: <BarChart2 size={18} />, path: "/dashboard/reports" },
-    { label: "Calendar", icon: <Calendar size={18} />, path: "/dashboard/calendar" },
-    { label: "Settings", icon: <Settings size={18} />, path: "/dashboard/settings" },
+    {
+      label: "My Prompts",
+      icon: <Users size={18} />,
+      path: "/dashboard/my-prompts",
+    },
+    {
+      label: "Prompt Editor",
+      icon: <ClipboardList size={18} />,
+      path: "/dashboard/prompt-editor",
+    },
+    {
+      label: "Reports",
+      icon: <BarChart2 size={18} />,
+      path: "/dashboard/reports",
+    },
+    {
+      label: "Calendar",
+      icon: <Calendar size={18} />,
+      path: "/dashboard/calendar",
+    },
+    {
+      label: "Settings",
+      icon: <Settings size={18} />,
+      path: "/dashboard/settings",
+    },
   ];
+
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+      toast.info(response.data.message);
+      localStorage.removeItem("user");
+     
+      navigate("/");
+      setIsOpen(false);
+    } catch (error: any) {
+      if (error.response) {
+        toast.error(error.response.data.message || "Error occurred");
+      } else {
+        toast.error("Network error");
+      }
+    }
+  };
 
   return (
     <>
@@ -69,8 +122,11 @@ const Sidebar = () => {
         {/* Premium Box */}
         <div className="bg-indigo-800 m-3 p-4 rounded-lg text-sm">
           <p className="mb-2 font-semibold">Use our Premium Features Now!</p>
-          <button className="bg-yellow-400 text-indigo-900 font-semibold px-3 py-1 rounded-md">
-            Upgrade
+          <button
+            onClick={handleLogout}
+            className="bg-yellow-400 text-indigo-900 font-semibold px-3 py-1 rounded-md"
+          >
+            Log out
           </button>
         </div>
       </div>

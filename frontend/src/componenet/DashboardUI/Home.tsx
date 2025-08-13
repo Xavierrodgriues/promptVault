@@ -1,8 +1,11 @@
 import { Mail, Phone, MessageSquare } from "lucide-react";
 import Calendar from "../Calender";
 import Clock from "../Clock";
+import { useNavigate } from "react-router";
 
 const Home = () => {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const navigate = useNavigate();
   return (
     <div className="p-4 lg:p-6 bg-gray-50 min-h-screen">
       {/* Header */}
@@ -33,13 +36,13 @@ const Home = () => {
           {/* Welcome Card */}
           <div className="bg-indigo-600 text-white rounded-lg p-6 flex flex-col md:flex-row justify-between items-center">
             <div className="max-w-md">
-              <h2 className="text-lg font-semibold mb-2">Hello Mr Smith!</h2>
+              <h2 className="text-lg font-semibold mb-2">Hello {user.username}!</h2>
               <p className="mb-4 text-sm">
                 Today you have 9 new applications. Also you need to hire ROR
                 Developer, React.JS Developer.
               </p>
-              <button className="bg-yellow-400 text-indigo-900 font-semibold px-4 py-2 rounded-md">
-                Read more
+              <button onClick={() => navigate("/dashboard/prompt-editor")} className="bg-yellow-400 text-indigo-900 font-semibold px-4 py-2 rounded-md">
+                Add Prompt
               </button>
             </div>
             <div className="mt-4 md:mt-0">

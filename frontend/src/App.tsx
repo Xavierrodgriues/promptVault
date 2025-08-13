@@ -4,9 +4,15 @@ import DashBoard from "./componenet/DashBoard";
 import ProtectedRoute from "./componenet/ProtectedRoute";
 import Reports from "./componenet/Reports";
 import Home from "./componenet/DashboardUI/Home";
+import { ToastContainer } from "react-toastify";
+import PromptEditor from "./componenet/DashboardUI/PromptEditor";
+import MyPrompt from "./componenet/DashboardUI/MyPrompt";
 
 const App = () => {
   return (
+    <>
+      <ToastContainer position="top-center"/>
+
     <Routes>
       {/* Login Page */}
       <Route path="/" element={<AuthForm />} />
@@ -25,8 +31,8 @@ const App = () => {
 
         {/* Sub Pages */}
         <Route path="reports" element={<Reports />} />
-        <Route path="recruitment" element={<div>Recruitment Page</div>} />
-        <Route path="onboarding" element={<div>Onboarding Page</div>} />
+        <Route path="my-prompts" element={<MyPrompt />} />
+        <Route path="prompt-editor" element={<PromptEditor />} />
         <Route path="calendar" element={<div>Calendar Page</div>} />
         <Route path="settings" element={<div>Settings Page</div>} />
       </Route>
@@ -34,6 +40,7 @@ const App = () => {
       {/* 404 */}
       <Route path="*" element={<div>404 Not Found</div>} />
     </Routes>
+    </>
   );
 };
 
