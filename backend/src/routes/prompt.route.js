@@ -101,5 +101,38 @@ router.delete("/prompts/delete/:id",authMiddleware, async (req, res) => {
   }
 });
 
+router.post("/prompts/tags", authMiddleware, async (req, res) => {
+  try {
+    const { tagText, page = 1, limit = 2 } = req.body;
 
+    if (!tagText) {
+      return res.status(400).json({ message: "Tag text is required" });
+    }
+
+    const skip = (page - 1) * limit;
+
+    const data = await Prompt.find({
+      tags: { $regex: new RegExp(`^${tagText}`, "i") }
+    })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Prompt.countDocuments({
+      tags: { $regex: new RegExp(`^${tagText}`, "i") }
+    });
+
+    res.json({
+      message: "Data sent successfully",
+      total,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      prompts: data,
+    });
+  } catch (err) {
+    console.error("Error generating tags:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+ 
 module.exports = router;

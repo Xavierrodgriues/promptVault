@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router";
 import AuthForm from "./componenet/AuthForm";
 import DashBoard from "./componenet/DashBoard";
 import ProtectedRoute from "./componenet/ProtectedRoute";
-import Reports from "./componenet/Reports";
+import TagSearch from "./componenet/TagSearch";
 import Home from "./componenet/DashboardUI/Home";
 import { ToastContainer } from "react-toastify";
 import PromptEditor from "./componenet/DashboardUI/PromptEditor";
@@ -30,7 +30,7 @@ const App = () => {
         <Route index element={<Home />} />
 
         {/* Sub Pages */}
-        <Route path="reports" element={<Reports />} />
+        <Route path="TagSearch" element={<TagSearch />} />
         <Route path="my-prompts" element={<MyPrompt />} />
         <Route path="prompt-editor" element={<PromptEditor />} />
         <Route path="calendar" element={<div>Calendar Page</div>} />

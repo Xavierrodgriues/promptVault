@@ -29,9 +29,9 @@ const Sidebar = () => {
       path: "/dashboard/prompt-editor",
     },
     {
-      label: "Reports",
+      label: "Search by Tags",
       icon: <BarChart2 size={18} />,
-      path: "/dashboard/reports",
+      path: "/dashboard/TagSearch",
     },
     {
       label: "Calendar",
