@@ -112,7 +112,8 @@ router.post("/prompts/tags", authMiddleware, async (req, res) => {
     const skip = (page - 1) * limit;
 
     const data = await Prompt.find({
-      tags: { $regex: new RegExp(`^${tagText}`, "i") }
+      tags: { $regex: new RegExp(`^${tagText}`, "i") },
+      type: "community",
     })
       .skip(skip)
       .limit(limit);

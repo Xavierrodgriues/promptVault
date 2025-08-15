@@ -2,21 +2,11 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import CategoryDropDown from "../CategoryDropDown";
-import { Trash2, } from "lucide-react";
-
-interface Prompt {
-  _id: string;
-  title: string;
-  promptText: string;
-  category: string;
-  type: string;
-  tags: string[];
-  ownerId: {
-    username: string;
-    email: string;
-  };
-  createdAt: string;
-}
+import PromptCard from "../../componenet/PromptCard";
+import PromptModal from "../../componenet/PromptModal";
+import Pagination from "../../componenet/Pagination";
+import { Prompt } from "../../types/Prompt";
+import { Loader } from "lucide-react";
 
 const MyPrompts = () => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -26,9 +16,16 @@ const MyPrompts = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-
-  // Modal state
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
+
+  const tagColors = [
+    "bg-blue-100 text-blue-700",
+    "bg-green-100 text-green-700",
+    "bg-yellow-100 text-yellow-700",
+    "bg-purple-100 text-purple-700",
+    "bg-pink-100 text-pink-700",
+    "bg-red-100 text-red-700",
+  ];
 
   const fetchPrompts = useCallback(async () => {
     try {
@@ -47,10 +44,7 @@ const MyPrompts = () => {
   }, [scope, limit, page, category]);
 
   const handleDelete = async (id: string) => {
-
-    if (!window.confirm("Are you sure you want to delete this prompt?")) {
-      return;
-    }
+    if (!window.confirm("Are you sure you want to delete this prompt?")) return;
     try {
       await axios.delete(`http://localhost:3000/prompts/delete/${id}`, {
         withCredentials: true,
@@ -65,23 +59,12 @@ const MyPrompts = () => {
     fetchPrompts();
   }, [fetchPrompts]);
 
- const tagColors = [
-              "bg-blue-100 text-blue-700",
-              "bg-green-100 text-green-700",
-              "bg-yellow-100 text-yellow-700",
-              "bg-purple-100 text-purple-700",
-              "bg-pink-100 text-pink-700",
-              "bg-red-100 text-red-700",
-            ];
-
   return (
-
     <div className="p-4 bg-gray-50 h-screen">
       {/* Filters */}
       <div className="bg-white shadow-md rounded-lg p-3 mb-4">
         <h2 className="text-lg font-semibold text-[#432DD7] mb-3">Filters</h2>
         <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-3">
-          {/* Scope Dropdown */}
           <CategoryDropDown
             value={scope}
             onChange={(val: "personal" | "community") => setScope(val)}
@@ -91,8 +74,6 @@ const MyPrompts = () => {
             ]}
             placeholder="Select Scope"
           />
-
-          {/* Category */}
           <CategoryDropDown
             value={category}
             onChange={(val) => setCategory(val)}
@@ -111,8 +92,6 @@ const MyPrompts = () => {
             ]}
             placeholder="Select Category"
           />
-
-          {/* Limit */}
           <CategoryDropDown
             value={limit}
             onChange={(val) => setLimit(val)}
@@ -125,125 +104,45 @@ const MyPrompts = () => {
         </div>
       </div>
 
-      {/* Prompts */}
+      {/* Content */}
       {loading ? (
-        <p className="text-center text-[#432DD7] text-sm">Loading...</p>
+        <div className="flex flex-col items-center justify-center h-[50vh]">
+          <Loader className="animate-spin text-[#432DD7]" size={24} />
+          
+        </div>
       ) : prompts.length === 0 ? (
-        <p className="text-center text-[#432DD7] text-sm">No prompts found.</p>
+        <div className="flex flex-col items-center justify-center h-[50vh]">
+          <p className="text-red-500 text-sm">No prompts found.</p>
+
+        </div>
       ) : (
         <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4">
-          {prompts.map((prompt) => {
-           
-            return (
-              <div
-                key={prompt._id}
-                onClick={() => setSelectedPrompt(prompt)}
-                className="bg-white rounded-lg shadow-md p-3 border border-gray-100 cursor-pointer hover:shadow-lg transition-all"
-              >
-                <div className="flex justify-between items-start">
-
-                  <h3 className="text-base font-bold text-[#432DD7]">
-                    {prompt.title}
-                  </h3>
-                  <button className="cursor-pointer" onClick={(e) =>{ e.stopPropagation(); handleDelete(prompt._id)}}><Trash2 size={16} color="red"/></button>
-                </div>
-
-                <div className="mt-1 text-xs text-gray-500">
-                  {prompt.category} | {prompt.type}
-                </div>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mt-2">
-                  {prompt.tags?.map((tag, i) => {
-                    const colorClass = tagColors[i % tagColors.length];
-                    return (
-                      <span
-                        key={i}
-                        className={`${colorClass} px-2 py-0.5 text-[10px] rounded-full`}
-                      >
-                        {tag}
-                      </span>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-2 text-[10px] text-gray-400">
-                  By {prompt.ownerId?.username} •{" "}
-                  {new Date(prompt.createdAt).toLocaleDateString()}
-                </div>
-              </div>
-            );
-          })}
+          {prompts.map((prompt) => (
+            <PromptCard
+              key={prompt._id}
+              prompt={prompt}
+              tagColors={tagColors}
+              onClick={() => setSelectedPrompt(prompt)}
+              onDelete={() => handleDelete(prompt._id)}
+            />
+          ))}
         </div>
       )}
 
       {/* Pagination */}
-      <div className="flex justify-center items-center gap-2 mt-6">
-        <button
-          disabled={page === 1}
-          onClick={() => setPage((p) => p - 1)}
-          className="bg-yellow-400 text-indigo-900 font-semibold px-2 py-1 text-sm rounded-md"
-        >
-          Prev
-        </button>
-        <span className="text-gray-700 font-medium text-sm">
-          {page} / {totalPages}
-        </span>
-        <button
-          disabled={page === totalPages}
-          onClick={() => setPage((p) => p + 1)}
-          className="bg-yellow-400 text-indigo-900 font-semibold px-2 py-1 text-sm rounded-md"
-        >
-          Next
-        </button>
-      </div>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPrev={() => setPage((p) => p - 1)}
+        onNext={() => setPage((p) => p + 1)}
+      />
 
       {/* Modal */}
-      {selectedPrompt && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-center p-3 z-50">
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 w-full max-w-xl max-h-[80vh] flex flex-col relative">
-            <button
-              onClick={() => setSelectedPrompt(null)}
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-sm"
-            >
-              ✕
-            </button>
-
-            <div className="p-4 overflow-y-auto">
-              <h2 className="text-xl font-bold text-[#432DD7] mb-3">
-                {selectedPrompt.title}
-              </h2>
-
-              <div className="mb-2 text-xs text-gray-600">
-                {selectedPrompt.category} | {selectedPrompt.type}
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1.5 mb-3">
-                {selectedPrompt.tags?.map((tag, i) => { 
-                  const colorClass = tagColors[i % tagColors.length];
-                  return (
-                  <span
-                    key={i}
-                    className={`${colorClass} px-2 py-0.5 text-[10px] rounded-full`}
-                  >
-                    {tag}
-                  </span>
-                )})}
-              </div>
-
-              <p className="text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">
-                {selectedPrompt.promptText}
-              </p>
-
-              <div className="mt-4 text-[10px] text-gray-500">
-                By {selectedPrompt.ownerId?.username} •{" "}
-                {new Date(selectedPrompt.createdAt).toLocaleDateString()}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <PromptModal
+        prompt={selectedPrompt}
+        onClose={() => setSelectedPrompt(null)}
+        tagColors={tagColors}
+      />
     </div>
   );
 };
