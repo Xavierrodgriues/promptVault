@@ -1,10 +1,10 @@
 // src/pages/TagSearch.tsx
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import PromptCard from "../../componenet/PromptCard";
-import PromptModal from "../../componenet/PromptModal";
-import Pagination from "../../componenet/Pagination";
-import { Prompt } from "../../types/Prompt"; 
+import PromptCard from "../componenet/PromptCard";
+import PromptModal from "../componenet/PromptModal";
+import Pagination from "../componenet/Pagination";
+import { Prompt } from "../types/Prompt"; 
 import {Loader} from "lucide-react"
 
 const TagSearch = () => {

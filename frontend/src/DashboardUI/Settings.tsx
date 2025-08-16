@@ -1,5 +1,5 @@
-import UsernameForm from "../UsernameForm";
-import PasswordForm from "../PasswordForm";
+import UsernameForm from "../componenet/UsernameForm";
+import PasswordForm from "../componenet/PasswordForm";
 
 
 

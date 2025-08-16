@@ -1,6 +1,6 @@
 import { Mail, Phone, MessageSquare } from "lucide-react";
-import Calendar from "../Calender";
-import Clock from "../Clock";
+import Calendar from "../componenet/Calender";
+import Clock from "../componenet/Clock";
 import { useNavigate } from "react-router";
 
 const Home = () => {

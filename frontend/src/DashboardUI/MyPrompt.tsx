@@ -1,11 +1,11 @@
 // src/pages/MyPrompts.tsx
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import CategoryDropDown from "../CategoryDropDown";
-import PromptCard from "../../componenet/PromptCard";
-import PromptModal from "../../componenet/PromptModal";
-import Pagination from "../../componenet/Pagination";
-import { Prompt } from "../../types/Prompt";
+import CategoryDropDown from "../componenet/CategoryDropDown";
+import PromptCard from "../componenet/PromptCard";
+import PromptModal from "../componenet/PromptModal";
+import Pagination from "../componenet/Pagination";
+import { Prompt } from "../types/Prompt";
 import { Loader } from "lucide-react";
 
 const MyPrompts = () => {

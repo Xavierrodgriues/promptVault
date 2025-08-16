@@ -2,13 +2,13 @@ import { Route, Routes } from "react-router";
 import AuthForm from "./componenet/AuthForm";
 import DashBoard from "./componenet/DashBoard";
 import ProtectedRoute from "./componenet/ProtectedRoute";
-import TagSearch from "./componenet/DashboardUI/TagSearch";
-import Home from "./componenet/DashboardUI/Home";
+import TagSearch from "./DashboardUI/TagSearch";
+import Home from "./DashboardUI/Home";
 import { ToastContainer } from "react-toastify";
-import PromptEditor from "./componenet/DashboardUI/PromptEditor";
-import MyPrompt from "./componenet/DashboardUI/MyPrompt";
-import Reports from "./componenet/DashboardUI/Reports";
-import Settings from "./componenet/DashboardUI/Settings";
+import PromptEditor from "./DashboardUI/PromptEditor";
+import MyPrompt from "./DashboardUI/MyPrompt";
+import Reports from "./DashboardUI/Reports";
+import Settings from "./DashboardUI/Settings";
 
 const App = () => {
   return (
