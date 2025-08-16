@@ -16,6 +16,14 @@ const UserSchema = new mongoose.Schema({
         type: String,
         minLength:[ 5 , 'Password must be at least 5 characters long'],
         required: true
+    },
+    twoFactorEnabled: {
+        type: Boolean,
+        default: false
+    },
+    twoFactorSecret: {
+        type: String,
+        default: null
     }
 
 }, {timestamps: true});

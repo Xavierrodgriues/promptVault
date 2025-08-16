@@ -1,7 +1,7 @@
 const userModal = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const speakeasy = require("speakeasy");
 const registerController = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -45,45 +45,132 @@ const registerController = async (req, res) => {
   }
 };
 
+// const loginController = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+    
+//       if (email?.trim() == "" || password?.trim() == "") {
+//         return res.json({ message: "Invalid Credentials" });
+//       }
+    
+
+//     const user = await userModal.findOne({ email });
+
+//     if (!user) {
+//       return res.status(401).json({message: "User do not exist"});
+//     }
+
+//     const hashpassword = await bcrypt.compare(password, user.password);
+
+//     if (!hashpassword) {
+//       return res.status(401).json({message: "Incorrect Password"});
+//     }
+
+//     const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+
+//     res.cookie("token", token);
+
+//     res.json({
+//       message: "Login done",
+//       data: user,
+//     });
+//   } catch (err) {
+//     res.status(500).json({message: err.message});
+//   }
+// };
+
+// const loginController = async (req, res) => {
+//   const { email, password, token } = req.body;
+
+//   try {
+//     const user = await userModal.findOne({ email });
+
+//     if (!user) return res.status(401).json({ message: "User does not exist" });
+
+//     const passwordMatch = await bcrypt.compare(password, user.password);
+//     if (!passwordMatch) return res.status(401).json({ message: "Incorrect password" });
+
+//     // If 2FA is enabled → check OTP
+//     if (user.twoFactorEnabled) {
+//       if (!token) {
+//         return res.status(403).json({ message: "2FA token required" });
+//       }
+
+//       const verified = speakeasy.totp.verify({
+//         secret: user.twoFactorSecret,
+//         encoding: "base32",
+//         token,
+//       });
+
+//       if (!verified) {
+//         return res.status(401).json({ message: "Invalid 2FA token" });
+//       }
+//     }
+
+//     // ✅ If password + (2FA if enabled) are correct
+//     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+//     res.cookie("token", jwtToken);
+
+//     res.json({ message: "Login successful", data: user });
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
+
+
 const loginController = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, token } = req.body;
 
   try {
-    
-      if (email?.trim() == "" || password?.trim() == "") {
-        return res.json({ message: "Invalid Credentials" });
-      }
-    
-
     const user = await userModal.findOne({ email });
 
-    if (!user) {
-      return res.status(401).json({message: "User do not exist"});
+    if (!user) return res.status(401).json({ message: "User does not exist" });
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) return res.status(401).json({ message: "Incorrect password" });
+
+    // If 2FA is enabled → check OTP
+    if (user.twoFactorEnabled) {
+      if (!token) {
+        return res.status(403).json({ message: "2FA token required" });
+      }
+
+      const verified = speakeasy.totp.verify({
+        secret: user.twoFactorSecret,
+        encoding: "base32",
+        token,
+      });
+
+      if (!verified) {
+        return res.status(401).json({ message: "Invalid 2FA token" });
+      }
     }
 
-    const hashpassword = await bcrypt.compare(password, user.password);
+    // ✅ If password + (2FA if enabled) are correct
+    const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+    res.cookie("token", jwtToken);
 
-    if (!hashpassword) {
-      return res.status(401).json({message: "Incorrect Password"});
-    }
-
-    const token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
-
-    res.cookie("token", token);
-
+    // Don’t send sensitive fields like password or secret
     res.json({
-      message: "Login done",
-      data: user,
+      message: "Login successful",
+      data: {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        twoFactorEnabled: user.twoFactorEnabled, // 👈 add this explicitly
+      },
     });
   } catch (err) {
-    res.status(500).json({message: err.message});
+    res.status(500).json({ message: err.message });
   }
 };
+
 
 const logoutController = async (req, res) => {
   res.clearCookie("token");
 
   return res.status(200).json({ message: "Logged out successfully" });
-};
+}; 
 
 module.exports = { registerController, loginController, logoutController };
