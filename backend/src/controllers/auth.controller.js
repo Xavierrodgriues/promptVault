@@ -22,6 +22,10 @@ const registerController = async (req, res) => {
         })
     }
 
+    if (password.length < 5) {
+      return res.status(400).json({ message: "Password must be at least 5 characters long" });
+    }
+
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = await userModal.create({

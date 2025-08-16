@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import PromptEditor from "./componenet/DashboardUI/PromptEditor";
 import MyPrompt from "./componenet/DashboardUI/MyPrompt";
 import Reports from "./componenet/DashboardUI/Reports";
+import Settings from "./componenet/DashboardUI/Settings";
 
 const App = () => {
   return (
@@ -35,7 +36,7 @@ const App = () => {
         <Route path="my-prompts" element={<MyPrompt />} />
         <Route path="prompt-editor" element={<PromptEditor />} />
         <Route path="calendar" element={<Reports />} />
-        <Route path="settings" element={<div>Settings Page</div>} />
+        <Route path="settings" element={<Settings />} />
       </Route>
 
       {/* 404 */}

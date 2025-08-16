@@ -4,9 +4,9 @@ import {
   Users,
   ClipboardList,
   BarChart2,
-  Calendar,
   Settings,
   Menu,
+  DamIcon,
   X,
 } from "lucide-react";
 import { NavLink, useNavigate } from "react-router"; // use react-router-dom here
@@ -34,8 +34,8 @@ const Sidebar = () => {
       path: "/dashboard/TagSearch",
     },
     {
-      label: "Calendar",
-      icon: <Calendar size={18} />,
+      label: "Reports",
+      icon: <DamIcon size={18} />,
       path: "/dashboard/calendar",
     },
     {

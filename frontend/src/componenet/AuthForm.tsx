@@ -59,7 +59,7 @@ const AuthForm = () => {
               />
               <input
                 type="password"
-                defaultValue={"test"}
+                defaultValue={"testt"}
                 {...register("password", { required: true })}
                 placeholder="Password"
                 className="border border-black h-10 rounded-2xl pl-4"
