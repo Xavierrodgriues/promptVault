@@ -20,7 +20,7 @@ const PasswordForm = () => {
     
     try {
       const res = await axios.put<ApiResponse>(
-        `http://localhost:3000/settings/update-password/`,
+        `${import.meta.env.VITE_BACKEND_ENDPOINT}settings/update-password/`,
         { password },
         { withCredentials: true }
       );

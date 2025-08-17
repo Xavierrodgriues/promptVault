@@ -31,7 +31,7 @@ const TwoFactorAuthForm = () => {
   const setup2FA = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/settings/setup-2fa",
+        `${import.meta.env.VITE_BACKEND_ENDPOINT}settings/setup-2fa`,
         {},
         { withCredentials: true }
       );
@@ -50,7 +50,7 @@ const TwoFactorAuthForm = () => {
   const verify2FA = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/settings/verify-2fa",
+        `${import.meta.env.VITE_BACKEND_ENDPOINT}settings/verify-2fa`,
         { token },
         { withCredentials: true }
       );
@@ -71,7 +71,7 @@ const TwoFactorAuthForm = () => {
   const disable2FA = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/settings/disable-2fa",
+        `${import.meta.env.VITE_BACKEND_ENDPOINT}settings/disable-2fa`,
         {},
         { withCredentials: true }
       );
@@ -87,7 +87,7 @@ const TwoFactorAuthForm = () => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md h-45">
+    <div className="p-4 bg-white rounded-2xl shadow-md">
       <h2 className="text-xl font-semibold mb-4">🔐 Two-Factor Authentication</h2>
 
       {!enabled ? (

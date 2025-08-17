@@ -26,7 +26,7 @@ export default function PromptEditor() {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:3000/prompt/add", form, { withCredentials: true });
+      await axios.post(`${import.meta.env.VITE_BACKEND_ENDPOINT}prompt/add`, form, { withCredentials: true });
       toast.success("Prompt saved!");
       setForm({ title: "", promptText: "", category: categories[0], type: types[0] });
     } catch (err) {

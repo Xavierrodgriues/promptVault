@@ -12,8 +12,8 @@ const AuthForm = () => {
 
   const onSubmit = async (data: object) => {
     const url = loginForm
-      ? "http://localhost:3000/auth/login"
-      : "http://localhost:3000/auth/register";
+      ? `${import.meta.env.VITE_BACKEND_ENDPOINT}auth/login`
+      : `${import.meta.env.VITE_BACKEND_ENDPOINT}auth/register`;
 
     try {
       const response = await axios.post(url, data, { withCredentials: true });

@@ -18,7 +18,7 @@ const UsernameForm = () => {
 
     try {
       const res = await axios.put<ApiResponse>(
-        `http://localhost:3000/settings/update-username/`,
+        `${import.meta.env.VITE_BACKEND_ENDPOINT}settings/update-username/`,
         { username },
         { withCredentials: true }
       );

@@ -30,7 +30,7 @@ const MyPrompts = () => {
   const fetchPrompts = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:3000/prompts", {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_ENDPOINT}prompts`, {
         params: { scope, limit, page, category },
         withCredentials: true,
       });
@@ -46,7 +46,7 @@ const MyPrompts = () => {
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this prompt?")) return;
     try {
-      await axios.delete(`http://localhost:3000/prompts/delete/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_ENDPOINT}prompts/delete/${id}`, {
         withCredentials: true,
       });
       setPrompts((prev) => prev.filter((prompt) => prompt._id !== id));

@@ -42,7 +42,7 @@ const TagSearch = () => {
     setLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:3000/prompts/tags",
+        `${import.meta.env.VITE_BACKEND_ENDPOINT}prompts/tags`,
         { tagText: debouncedTagText, page, limit: 6 },
         { withCredentials: true }
       );
