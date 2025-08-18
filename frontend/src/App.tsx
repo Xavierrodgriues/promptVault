@@ -35,7 +35,7 @@ const App = () => {
         <Route path="TagSearch" element={<TagSearch />} />
         <Route path="my-prompts" element={<MyPrompt />} />
         <Route path="prompt-editor" element={<PromptEditor />} />
-        <Route path="calendar" element={<Reports />} />
+        <Route path="reports" element={<Reports />} />
         <Route path="settings" element={<Settings />} />
       </Route>
 

@@ -36,7 +36,7 @@ const Sidebar = () => {
     {
       label: "Reports",
       icon: <DamIcon size={18} />,
-      path: "/dashboard/calendar",
+      path: "/dashboard/reports",
     },
     {
       label: "Settings",
