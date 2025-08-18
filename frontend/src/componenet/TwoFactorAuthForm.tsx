@@ -111,7 +111,7 @@ const TwoFactorAuthForm = () => {
               />
               <button
                 onClick={verify2FA}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg"
+                className="bg-green-600 cursor-pointer text-white px-4 py-2 rounded-lg"
               >
                 Verify & Enable
               </button>
@@ -123,7 +123,7 @@ const TwoFactorAuthForm = () => {
           <p className="mb-2 text-green-600">✅ 2FA is currently enabled</p>
           <button
             onClick={disable2FA}
-            className="bg-red-600 text-white px-4 py-2 rounded-lg"
+            className="bg-red-600 cursor-pointer text-white px-4 py-2 rounded-lg"
           >
             Disable 2FA
           </button>

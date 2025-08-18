@@ -1,6 +1,7 @@
 import UsernameForm from "../componenet/UsernameForm";
 import PasswordForm from "../componenet/PasswordForm";
-import TwoFactorAuthForm from "./TwoFactorAuthForm";
+import TwoFactorAuthForm from "../componenet/TwoFactorAuthForm";
+import ViewEmail from "../componenet/ViewEmail";
 
 
 
@@ -16,6 +17,7 @@ const Settings = () => {
         <UsernameForm />
         <PasswordForm />
         <TwoFactorAuthForm />
+        <ViewEmail />
       </div>
 
       
