@@ -93,7 +93,7 @@ const Sidebar = () => {
         {/* Logo & Close */}
         <div className="flex items-center justify-between p-5 font-bold text-lg tracking-wide">
           <span>
-            Twit<span className="text-yellow-400">HR</span>
+            Tuga's <span className="text-yellow-300">App</span>
           </span>
           <button className="lg:hidden" onClick={() => setIsOpen(false)}>
             <X size={20} />

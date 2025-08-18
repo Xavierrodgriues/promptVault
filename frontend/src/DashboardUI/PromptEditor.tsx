@@ -38,8 +38,8 @@ export default function PromptEditor() {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">Prompt Editor</h2>
+    <div className="p-6 bg-white shadow-md">
+      <h2 className="text-2xl font-bold mb-6">Prompt Editor</h2>
 
       <form className="space-y-5" onSubmit={handleSubmit}>
         {/* Title */}

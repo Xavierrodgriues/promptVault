@@ -39,7 +39,7 @@ const getPrompts = async (req, res) => {
     let { limit = 6 } = req.query;
 
     // Convert limit to number and clamp it to max 6
-    limit = Math.min(Number(limit) || 6, 6);
+    limit = Math.min(Number(limit) || 5, 5);
 
     const filter = {};
 
@@ -130,9 +130,21 @@ const searchByTags =  async (req, res) => {
   }
 }
 
+const getTotalPrompts = async (req, res) =>{
+    try {
+        const total = await Prompt.countDocuments({ ownerId: req.user._id });
+        res.json({ total });
+    } catch (err) {
+        console.error("Error fetching total prompts:", err);
+        res.status(500).json({ message: err.message, error: err.message });
+    }
+
+}
+
 module.exports = {
     createPrompt,
     getPrompts,
     deletePrompt,
-    searchByTags
+    searchByTags,
+    getTotalPrompts
 };

@@ -1,11 +1,74 @@
-import { Mail, Phone, MessageSquare } from "lucide-react";
+import { Mail, MessageSquare } from "lucide-react";
 import Calendar from "../componenet/Calender";
 import Clock from "../componenet/Clock";
 import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+type Data = [{
+  title: string;
+  tags: string[];
+}];
+
+
+const tagColors = [
+  "bg-blue-100 text-blue-700",
+  "bg-green-100 text-green-700",
+  "bg-yellow-100 text-yellow-700",
+  "bg-purple-100 text-purple-700",
+  "bg-pink-100 text-pink-700",
+  "bg-red-100 text-red-700",
+];
+
 
 const Home = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const [data, setData] = useState<Data>();
+  const [totalPrompts, setTotalPrompts] = useState<number>(0);
   const navigate = useNavigate();
+
+  const getData = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_ENDPOINT}prompts`, {
+        withCredentials: true
+      });
+
+      setData(response.data.data);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error("Error fetching data:", err);
+        toast.error(err.response?.data?.message || "Error fetching data");
+      } else {
+        console.error("Unexpected error:", err);
+        toast.error("An unexpected error occurred");
+      }
+    }
+  }
+
+  const getTotalPrompts = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_ENDPOINT}prompts/count`, {
+        withCredentials: true
+      });
+      setTotalPrompts(response.data.total);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error("Error fetching total prompts:", err);
+        toast.error(err.response?.data?.message || "Error fetching total prompts");
+      } else {
+        console.error("Unexpected error:", err);
+        toast.error("An unexpected error occurred");
+      }
+    }
+  }
+
+  useEffect(() => {
+    getData();
+    getTotalPrompts();
+  }, []);
+
+
   return (
     <div className="p-4 lg:p-6 bg-gray-50 min-h-screen">
       {/* Header */}
@@ -18,13 +81,13 @@ const Home = () => {
           <button className="p-2 bg-white rounded-full shadow">
             <MessageSquare size={18} />
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 cursor-context-menu">
             <img
-              src="https://randomuser.me/api/portraits/men/75.jpg"
+              src="https://api.dicebear.com/7.x/identicon/svg"
               alt="profile"
               className="w-8 h-8 rounded-full"
             />
-            <span className="hidden sm:block font-semibold">Mr Smith</span>
+            <span className="hidden sm:block font-semibold">Mr./ Mrs. {user.username}</span>
           </div>
         </div>
       </div>
@@ -34,14 +97,13 @@ const Home = () => {
         {/* Left/Main Section */}
         <div className="lg:col-span-2 space-y-6">
           {/* Welcome Card */}
-          <div className="bg-indigo-600 text-white rounded-lg p-6 flex flex-col md:flex-row justify-between items-center">
-            <div className="max-w-md">
+          <div className="bg-indigo-600 shadow-md text-white rounded-lg p-6 flex flex-col md:flex-row justify-between items-center">
+            <div className="max-w-md cursor-context-menu">
               <h2 className="text-lg font-semibold mb-2">Hello {user.username}!</h2>
               <p className="mb-4 text-sm">
-                Today you have 9 new applications. Also you need to hire ROR
-                Developer, React.JS Developer.
+                Have you stored your prompt today? If not, then what are you waiting for, go lock something amazing
               </p>
-              <button onClick={() => navigate("/dashboard/prompt-editor")} className="bg-yellow-400 text-indigo-900 font-semibold px-4 py-2 rounded-md">
+              <button onClick={() => navigate("/dashboard/prompt-editor")} className="bg-yellow-300 cursor-pointer hover:bg-yellow-400 text-indigo-900 font-semibold px-4 py-2 rounded-md">
                 Add Prompt
               </button>
             </div>
@@ -51,60 +113,40 @@ const Home = () => {
           </div>
 
           {/* Recruitment Progress */}
-          <div className="bg-white rounded-lg p-6 shadow">
+          <div className="bg-white rounded-lg p-6 shadow-md border-1 border-gray-200">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold text-lg">Recruitment Progress</h3>
-              <button className="text-indigo-600 font-medium">View All</button>
+              <h3 className="font-semibold text-lg">Community Prompts</h3>
+              <button onClick={() => navigate("/dashboard/my-prompts")} className="text-indigo-600 font-medium cursor-pointer">View All</button>
             </div>
 
             <div className="space-y-4">
-              {[
-                {
-                  name: "Mary G. Schuelke",
-                  role: "Project Manager",
-                  roleColor: "bg-red-100 text-red-600",
-                  status: "Tech Interview",
-                  avatar: "https://randomuser.me/api/portraits/women/65.jpg",
-                },
-                {
-                  name: "Lawrence A. Mason",
-                  role: "HR Developer",
-                  roleColor: "bg-yellow-100 text-yellow-700",
-                  status: "Task",
-                  avatar: "https://randomuser.me/api/portraits/men/68.jpg",
-                },
-                {
-                  name: "Jimmy C. Wilson",
-                  role: "React JS Developer",
-                  roleColor: "bg-indigo-100 text-indigo-700",
-                  status: "Resume Review",
-                  avatar: "https://randomuser.me/api/portraits/men/15.jpg",
-                },
-                {
-                  name: "Vivian J. Joseph",
-                  role: "Node JS Developer",
-                  roleColor: "bg-green-100 text-green-700",
-                  status: "Final Interview",
-                  avatar: "https://randomuser.me/api/portraits/women/50.jpg",
-                },
-              ].map((person, idx) => (
+              {data?.map((person, idx) => (
                 <div key={idx} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <img
-                      src={person.avatar}
-                      alt={person.name}
-                      className="w-10 h-10 rounded-full"
+                      src={`https://api.dicebear.com/7.x/identicon/svg?seed=${idx}`}
+                      alt="Random User"
+                      className="w-8 h-8 rounded-full"
                     />
+
                     <div>
-                      <p className="font-medium">{person.name}</p>
-                      <span
-                        className={`text-xs px-2 py-0.5 rounded ${person.roleColor}`}
-                      >
-                        {person.role}
-                      </span>
+                      <p className="font-medium">{person.title}</p>
+                      <p className="text-sm flex flex-wrap gap-2">
+                        {person.tags.map((tag, i) => {
+                          const randomColor = tagColors[Math.floor(Math.random() * tagColors.length)];
+                          return (
+                            <span
+                              key={i}
+                              className={`px-2 py-1 rounded-full text-[10px] font-medium ${randomColor}`}
+                            >
+                              {tag}
+                            </span>
+                          );
+                        })}
+                      </p>
                     </div>
                   </div>
-                  <span className="text-sm text-gray-600">{person.status}</span>
+
                 </div>
               ))}
             </div>
@@ -121,34 +163,18 @@ const Home = () => {
           {/* Profile Card */}
           <div className="bg-white p-6 rounded-lg shadow text-center">
             <img
-              src="https://randomuser.me/api/portraits/men/75.jpg"
+              src="https://api.dicebear.com/7.x/identicon/svg"
               alt="Mr Smith"
               className="w-20 h-20 rounded-full mx-auto mb-3"
             />
-            <h4 className="font-semibold">Mr Smith</h4>
-            <p className="text-sm text-gray-500">Sr. HR Manager</p>
-
-            <div className="flex justify-center gap-3 my-4">
-              <button className="p-2 bg-indigo-100 rounded-full">
-                <Phone size={16} />
-              </button>
-              <button className="p-2 bg-indigo-100 rounded-full">
-                <Mail size={16} />
-              </button>
-              <button className="p-2 bg-indigo-100 rounded-full">
-                <MessageSquare size={16} />
-              </button>
-            </div>
+            <h4 className="font-semibold">Mr./Mrs. {user.username}</h4>
 
             <div className="text-sm text-gray-600 space-y-1">
               <p>
-                <strong>Company:</strong> FoxHr Pvt. Ltd.
+                <strong>Joining Date:</strong> {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
               </p>
               <p>
-                <strong>Joining Date:</strong> 01/08/2018
-              </p>
-              <p>
-                <strong>Projects:</strong> 34 Active
+                <strong>Prompts:</strong> {totalPrompts} Active
               </p>
             </div>
           </div>

@@ -62,7 +62,7 @@ const MyPrompts = () => {
   return (
     <div className="p-4 bg-gray-50 h-screen">
       {/* Filters */}
-      <div className="bg-white shadow-md rounded-lg p-3 mb-4">
+      <div className="bg-white shadow-md p-3 mb-4">
         <h2 className="text-lg font-semibold text-[#432DD7] mb-3">Filters</h2>
         <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-3">
           <CategoryDropDown

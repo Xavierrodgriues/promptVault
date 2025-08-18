@@ -7,7 +7,7 @@ import TwoFactorAuthForm from "./TwoFactorAuthForm";
 const Settings = () => {
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-white h-full">
       <h1 className="text-2xl font-semibold mb-6">⚙️ Settings</h1>
 
       <div className="grid md:grid-cols-2 gap-6">

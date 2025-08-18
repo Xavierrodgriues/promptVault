@@ -60,8 +60,8 @@ const TagSearch = () => {
   }, [fetchPrompts]);
 
   return (
-    <div className="p-4 bg-gray-50 min-h-screen">
-      <h1 className="text-xl lg:text-2xl font-bold text-[#432DD7] mb-6">
+    <div className="p-4 bg-white  min-h-screen">
+      <h1 className="text-xl lg:text-2xl font-bold mb-6">
         Search by Tag
       </h1>
 
