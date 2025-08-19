@@ -33,6 +33,8 @@ const Reports = () => {
   //   { month: "Jul", prompts: 50, tags: 40, personal: 30, community: 20 },
   // ]);
   const [data, setData] = useState<{ month: string; personal: number; community: number }[]>([]);
+  const [trendData, setTrendData] = useState<{ month: string; prompts: number; tags: number }[]>([]);
+
 
   useEffect(() => {
     const fetchTotalPrompts = async () => {
@@ -94,6 +96,17 @@ const Reports = () => {
       }
     };
 
+    const fetchMonthlyTrends = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_ENDPOINT}prompts/trends/6months`, {
+          withCredentials: true,
+        });
+        setTrendData(res.data.data);
+      } catch (err) {
+        console.error("Error fetching monthly trends:", err);
+      }
+    };
+
 
 
     fetchTotalPrompts();
@@ -101,6 +114,7 @@ const Reports = () => {
     fetchTotalCommunity();
     fetchRatio();
     fetchMonthlyStats();
+    fetchMonthlyTrends();
   }, []);
 
   return (
@@ -149,21 +163,22 @@ const Reports = () => {
           <h2 className="text-lg font-semibold mb-4 text-gray-800">Monthly Trends</h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="month" stroke="#6B7280" />
-                <YAxis stroke="#6B7280" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#fff",
-                    borderRadius: "12px",
-                    border: "1px solid #E5E7EB",
-                  }}
-                />
-                <Legend />
-                <Line type="monotone" dataKey="prompts" stroke="#3B82F6" strokeWidth={3} />
-                <Line type="monotone" dataKey="tags" stroke="#10B981" strokeWidth={3} />
-              </LineChart>
+              <LineChart data={trendData}>
+  <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+  <XAxis dataKey="month" stroke="#6B7280" />
+  <YAxis stroke="#6B7280" />
+  <Tooltip
+    contentStyle={{
+      backgroundColor: "#fff",
+      borderRadius: "12px",
+      border: "1px solid #E5E7EB",
+    }}
+  />
+  <Legend />
+  <Line type="monotone" dataKey="prompts" stroke="#3B82F6" strokeWidth={3} />
+  <Line type="monotone" dataKey="tags" stroke="#10B981" strokeWidth={3} />
+</LineChart>
+
             </ResponsiveContainer>
           </div>
         </div>

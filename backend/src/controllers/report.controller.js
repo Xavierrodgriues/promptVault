@@ -153,49 +153,69 @@ const getLast6MonthsStats = async (req, res) => {
   }
 };
 
-const getDailyActivity = async (req, res) => {
-  try {
-    const userId = req.user._id; // from authMiddleware
-    const startOfMonth = moment().startOf("month").toDate();
-    const endOfMonth = moment().endOf("month").toDate();
 
-    // Aggregate prompts grouped by day
-    const activity = await promptModel.aggregate([
+const getMonthlyTrends = async (req, res) => {
+  try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    // Aggregate last 6 months by month
+    const stats = await promptModel.aggregate([
       {
         $match: {
-          ownerId: userId,
-          createdAt: { $gte: startOfMonth, $lte: endOfMonth },
-        },
+          ownerId: req.user._id,
+          createdAt: {
+            $gte: new Date(new Date().setMonth(new Date().getMonth() - 5)) // last 6 months
+          }
+        }
       },
       {
         $group: {
-          _id: { $dayOfMonth: "$createdAt" },
-          count: { $sum: 1 },
-        },
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          prompts: { $sum: 1 },
+          // if you have tags array: count tags length
+          tags: { $sum: { $size: { $ifNull: ["$tags", []] } } }
+        }
       },
-      { $sort: { "_id": 1 } },
+      { $sort: { "_id.year": 1, "_id.month": 1 } }
     ]);
 
-    // Fill missing days with 0
-    const daysInMonth = moment().daysInMonth();
-    const dailyActivity = Array.from({ length: daysInMonth }, (_, i) => {
-      const day = i + 1;
-      const found = activity.find((a) => a._id === day);
+    // Format results into { month, prompts, tags }
+    const formattedStats = stats.map(entry => {
+      const month = new Date(entry._id.year, entry._id.month - 1).toLocaleString("default", { month: "short" });
       return {
-        date: moment().date(day).format("YYYY-MM-DD"),
-        count: found ? found.count : 0,
+        month,
+        prompts: entry.prompts,
+        tags: entry.tags
       };
     });
 
-    res.json(dailyActivity);
-  } catch (err) {
-    console.error("Error fetching daily activity:", err);
-    res.status(500).json({ message: "Server error" });
+    // Ensure all 6 months exist (fill with 0 if missing)
+    const months = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date();
+      d.setMonth(d.getMonth() - i);
+      const month = d.toLocaleString("default", { month: "short" });
+      const found = formattedStats.find(m => m.month === month);
+      months.push(found || { month, prompts: 0, tags: 0 });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: months
+    });
+  } catch (error) {
+    console.error("Error fetching monthly trends:", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
-
-
-
 
 
 module.exports = {
@@ -203,5 +223,5 @@ module.exports = {
   getCommunity,
   getRatio,
   getLast6MonthsStats,
-  
+  getMonthlyTrends
 }
