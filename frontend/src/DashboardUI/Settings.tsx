@@ -2,6 +2,7 @@ import UsernameForm from "../componenet/UsernameForm";
 import PasswordForm from "../componenet/PasswordForm";
 import TwoFactorAuthForm from "../componenet/TwoFactorAuthForm";
 import ViewEmail from "../componenet/ViewEmail";
+import ChangeTheme from "../componenet/ChangeTheme";
 
 
 
@@ -19,7 +20,8 @@ const Settings = () => {
         <TwoFactorAuthForm />
         <ViewEmail />
       </div>
-
+      
+        <ChangeTheme />
       
     </div>
   );
