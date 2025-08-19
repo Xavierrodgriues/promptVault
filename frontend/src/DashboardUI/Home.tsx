@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useTheme } from "../context/ThemeContext";
 
 type Data = [{
   title: string;
@@ -27,6 +28,7 @@ const Home = () => {
   const [data, setData] = useState<Data>();
   const [totalPrompts, setTotalPrompts] = useState<number>(0);
   const navigate = useNavigate();
+  const {activeTheme, textTheme} = useTheme();
 
   const getData = async () => {
     try {
@@ -97,13 +99,13 @@ const Home = () => {
         {/* Left/Main Section */}
         <div className="lg:col-span-2 space-y-6">
           {/* Welcome Card */}
-          <div className="bg-indigo-600 shadow-md text-white rounded-lg p-6 flex flex-col md:flex-row justify-between items-center">
+          <div className={`${activeTheme} shadow-md text-white rounded-lg p-6 flex flex-col md:flex-row justify-between items-center`}>
             <div className="max-w-md cursor-context-menu">
               <h2 className="text-lg font-semibold mb-2">Hello {user.username}!</h2>
               <p className="mb-4 text-sm">
                 Have you stored your prompt today? If not, then what are you waiting for, go lock something amazing
               </p>
-              <button onClick={() => navigate("/dashboard/prompt-editor")} className="bg-yellow-300 cursor-pointer hover:bg-yellow-400 text-indigo-900 font-semibold px-4 py-2 rounded-md">
+              <button onClick={() => navigate("/dashboard/prompt-editor")} className={`bg-yellow-300 cursor-pointer hover:bg-yellow-400 ${textTheme} font-semibold px-4 py-2 rounded-md`}>
                 Add Prompt
               </button>
             </div>
@@ -116,7 +118,7 @@ const Home = () => {
           <div className="bg-white rounded-lg p-6 shadow-md border-1 border-gray-200">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-semibold text-lg">Community Prompts</h3>
-              <button onClick={() => navigate("/dashboard/my-prompts")} className="text-indigo-600 font-medium cursor-pointer">View All</button>
+              <button onClick={() => navigate("/dashboard/my-prompts")} className={`${textTheme} font-medium cursor-pointer`}>View All</button>
             </div>
 
             <div className="space-y-4">

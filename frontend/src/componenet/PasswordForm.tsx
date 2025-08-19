@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
+import { useTheme } from "../context/ThemeContext";
 
 interface ApiResponse {
   message: string;
@@ -11,7 +12,8 @@ interface ApiResponse {
 const PasswordForm = () => {
 
     const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const {textTheme} = useTheme();
 
       // Handle password update
   const handleUpdatePassword = async (e: FormEvent<HTMLFormElement>) => {
@@ -51,7 +53,7 @@ const PasswordForm = () => {
             <button
               type="submit"
               disabled={loading}
-              className="bg-yellow-300 cursor-pointer text-indigo-600 font-semibold px-4 py-2 rounded-lg hover:bg-yellow-400 disabled:opacity-50"
+              className={`bg-yellow-300 cursor-pointer ${textTheme} font-semibold px-4 py-2 rounded-lg hover:bg-yellow-400 disabled:opacity-50`}
             >
               {loading ? "Updating..." : "Update Password"}
             </button>

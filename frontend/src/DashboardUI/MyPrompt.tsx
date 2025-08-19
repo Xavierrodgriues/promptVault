@@ -7,6 +7,7 @@ import PromptModal from "../componenet/PromptModal";
 import Pagination from "../componenet/Pagination";
 import { Prompt } from "../types/Prompt";
 import { Loader } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 
 const MyPrompts = () => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -17,7 +18,7 @@ const MyPrompts = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
-
+  const {textTheme} = useTheme();
   const tagColors = [
     "bg-blue-100 text-blue-700",
     "bg-green-100 text-green-700",
@@ -63,7 +64,7 @@ const MyPrompts = () => {
     <div className="p-4 bg-gray-50 h-screen">
       {/* Filters */}
       <div className="bg-white shadow-md p-3 mb-4">
-        <h2 className="text-lg font-semibold text-[#432DD7] mb-3">Filters</h2>
+        <h2 className={`text-lg font-semibold ${textTheme} mb-3`}>Filters</h2>
         <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-3">
           <CategoryDropDown
             value={scope}

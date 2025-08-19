@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { useTheme } from "../context/ThemeContext";
 
 const Calendar = () => {
   const today = new Date();
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
+  const {activeTheme} = useTheme();
   const months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -64,7 +65,7 @@ const Calendar = () => {
           key={day}
           onClick={() => handleDateClick(day)}
           className={`cursor-pointer p-2 text-center rounded-lg
-            ${isToday ? "bg-blue-500 text-white" : ""}
+            ${isToday ? `${activeTheme} text-white` : ""}
             ${isSelected ? "bg-green-500 text-white" : ""}
             hover:bg-gray-200 transition`}
         >

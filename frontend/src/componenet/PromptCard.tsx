@@ -1,6 +1,7 @@
 // src/components/PromptCard.tsx
 import { Trash2 } from "lucide-react";
 import { Prompt } from "../types/Prompt";
+import { useTheme } from "../context/ThemeContext";
 
 interface PromptCardProps {
   prompt: Prompt;
@@ -10,13 +11,14 @@ interface PromptCardProps {
 }
 
 export default function PromptCard({ prompt, onClick, onDelete, tagColors }: PromptCardProps) {
+  const {textTheme} = useTheme();
   return (
     <div
       onClick={onClick}
       className="bg-white rounded-lg shadow-md p-3 border border-gray-100 cursor-pointer hover:shadow-lg transition-all"
     >
       <div className="flex justify-between items-start">
-        <h3 className="text-base font-bold text-[#432DD7]">{prompt.title}</h3>
+        <h3 className={`text-base font-bold ${textTheme}`}>{prompt.title}</h3>
         {onDelete && (
           <button
             className="cursor-pointer"

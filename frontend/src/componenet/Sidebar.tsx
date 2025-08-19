@@ -12,8 +12,10 @@ import {
 import { NavLink, useNavigate } from "react-router"; // use react-router-dom here
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useTheme } from "../context/ThemeContext";
 
 const Sidebar = () => {
+  const { sidebarTheme, activeTheme, logoutTheme, hoverTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
 
   const menuItems = [
@@ -55,7 +57,7 @@ const Sidebar = () => {
       );
       toast.info(response.data.message);
       localStorage.removeItem("user");
-     
+
       navigate("/");
       setIsOpen(false);
     } catch (error: unknown) {
@@ -87,7 +89,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed lg:static top-0 left-0 h-full bg-indigo-900 text-white w-64 lg:w-1/6 flex flex-col justify-between transform transition-transform duration-300 z-50 
+        className={`fixed lg:static top-0 left-0 h-full ${sidebarTheme} text-white w-64 lg:w-1/6 flex flex-col justify-between transform transition-transform duration-300 z-50 
         ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}
       >
         {/* Logo & Close */}
@@ -108,9 +110,10 @@ const Sidebar = () => {
               end={item.path === "/dashboard"} // only exact match for dashboard
               key={idx}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-5 py-3 cursor-pointer transition-colors
-                 hover:bg-indigo-700 ${isActive ? "bg-indigo-700" : ""}`
+                `flex items-center gap-3 px-5 py-3 cursor-pointer transition-colors ${hoverTheme} ${isActive ? activeTheme : ""
+                }`
               }
+
               onClick={() => setIsOpen(false)}
             >
               {item.icon}
@@ -120,7 +123,7 @@ const Sidebar = () => {
         </nav>
 
         {/* Premium Box */}
-        <div className="bg-indigo-800 m-3 p-4 rounded-lg text-sm">
+        <div className={`${logoutTheme} m-3 p-4 rounded-lg text-sm`}>
           <p className="mb-2 font-semibold">Use our Premium Features Now!</p>
           <button
             onClick={handleLogout}
