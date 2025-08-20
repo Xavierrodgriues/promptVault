@@ -124,7 +124,7 @@ const Sidebar = () => {
 
         {/* Premium Box */}
         <div className={`${logoutTheme} m-3 p-4 rounded-lg text-sm`}>
-          <p className="mb-2 font-semibold">Use our Premium Features Now!</p>
+          <p className="mb-2 font-semibold">Take break regularly!</p>
           <button
             onClick={handleLogout}
             className="bg-yellow-400 text-indigo-900 font-semibold px-3 py-1 rounded-md"

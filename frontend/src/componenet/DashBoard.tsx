@@ -7,7 +7,7 @@ const DashBoard = () => {
   return (
     <div className="flex h-screen">
       <Sidebar />
-      <div className={`${bodyTheme} flex-1 p-5`}>
+      <div className={`${bodyTheme} flex-1 p-5 h-full overflow-y-auto`}>
         {/* Main dashboard content */}
         <Outlet />
       </div>
