@@ -18,7 +18,7 @@ const ChangeTheme = () => {
     <div className="bg-white shadow-md w-full rounded-2xl p-6">
       <h2 className="text-lg font-semibold mb-4">Change Theme</h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
         {themes.map((theme) => (
           <button
             key={theme.id}

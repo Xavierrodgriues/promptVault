@@ -73,7 +73,7 @@ const Sidebar = () => {
     <>
       {/* Mobile Toggle Button */}
       <button
-        className="lg:hidden p-4 bg-indigo-900 text-white"
+        className={`lg:hidden p-4 ${sidebarTheme} text-white`}
         onClick={() => setIsOpen(true)}
       >
         <Menu size={24} />

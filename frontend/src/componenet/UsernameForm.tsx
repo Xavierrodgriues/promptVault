@@ -9,10 +9,9 @@ interface ApiResponse {
 }
 
 const UsernameForm = () => {
-  // Handle username update
   const [username, setUsername] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const {textTheme} = useTheme();
+  const { textTheme } = useTheme();
 
   const handleUpdateUsername = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,31 +24,32 @@ const UsernameForm = () => {
         { withCredentials: true }
       );
 
-    toast.success(res.data.message);
+      toast.success(res.data.message);
       setUsername("");
     } catch (err) {
       const error = err as AxiosError<ApiResponse>;
-    toast.error(error.response?.data?.message || "Error updating username");
+      toast.error(error.response?.data?.message || "Error updating username");
     } finally {
       setLoading(false);
     }
   };
+
   return (
-    <div className="bg-white shadow-md rounded-2xl p-6">
+    <div className="bg-white shadow-md rounded-2xl p-4 sm:p-6">
       <h2 className="text-lg font-semibold mb-4">Change Username</h2>
-      <form onSubmit={handleUpdateUsername}>
+      <form onSubmit={handleUpdateUsername} className="flex flex-col">
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Enter new username"
-          className="w-full border p-2 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border p-2 rounded-lg mb-4 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
           required
         />
         <button
           type="submit"
           disabled={loading}
-          className={`bg-yellow-300 ${textTheme} cursor-pointer font-semibold px-4 py-2 rounded-lg hover:bg-yellow-400 disabled:opacity-50`}
+          className={`bg-yellow-300 ${textTheme} cursor-pointer font-semibold px-3 sm:px-4 py-2 rounded-lg hover:bg-yellow-400 disabled:opacity-50 text-sm sm:text-base`}
         >
           {loading ? "Updating..." : "Update Username"}
         </button>

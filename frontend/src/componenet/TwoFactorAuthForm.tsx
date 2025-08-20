@@ -55,7 +55,7 @@ const TwoFactorAuthForm = () => {
         { withCredentials: true }
       );
       toast.success(res.data.message);
-      updateUserLocalStorage(true); // ✅ Save state
+      updateUserLocalStorage(true);
       setQrCode(null);
       setToken("");
     } catch (err: unknown) {
@@ -76,7 +76,7 @@ const TwoFactorAuthForm = () => {
         { withCredentials: true }
       );
       toast.success(res.data.message);
-      updateUserLocalStorage(false); // ✅ Save state
+      updateUserLocalStorage(false);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         toast.error(err.response?.data?.message || "Error disabling 2FA");
@@ -87,31 +87,37 @@ const TwoFactorAuthForm = () => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-2xl shadow-md">
-      <h2 className="text-xl font-semibold mb-4">🔐 Two-Factor Authentication</h2>
+    <div className="p-4 sm:p-6 bg-white rounded-2xl shadow-md">
+      <h2 className="text-lg sm:text-xl font-semibold mb-4">
+        🔐 Two-Factor Authentication
+      </h2>
 
       {!enabled ? (
         <div>
           {!qrCode ? (
             <button
               onClick={setup2FA}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+              className="bg-blue-600 text-white text-sm sm:text-base px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-700 transition"
             >
               Enable 2FA
             </button>
           ) : (
             <div className="flex flex-col items-center">
-              <img src={qrCode} alt="QR Code" className="w-40 h-40 mb-4" />
+              <img
+                src={qrCode}
+                alt="QR Code"
+                className="w-32 h-32 sm:w-40 sm:h-40 mb-4"
+              />
               <input
                 type="text"
                 placeholder="Enter 6-digit code"
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
-                className="border border-gray-400 rounded px-2 py-1 mb-2"
+                className="w-full border border-gray-400 rounded-lg px-2 py-2 mb-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
               <button
                 onClick={verify2FA}
-                className="bg-green-600 cursor-pointer text-white px-4 py-2 rounded-lg"
+                className="bg-green-600 text-white text-sm sm:text-base px-3 sm:px-4 py-2 rounded-lg hover:bg-green-700 transition"
               >
                 Verify & Enable
               </button>
@@ -120,10 +126,12 @@ const TwoFactorAuthForm = () => {
         </div>
       ) : (
         <div>
-          <p className="mb-2 text-green-600">✅ 2FA is currently enabled</p>
+          <p className="mb-3 text-green-600 text-sm sm:text-base">
+            ✅ 2FA is currently enabled
+          </p>
           <button
             onClick={disable2FA}
-            className="bg-red-600 cursor-pointer text-white px-4 py-2 rounded-lg"
+            className="bg-red-600 text-white text-sm sm:text-base px-3 sm:px-4 py-2 rounded-lg hover:bg-red-700 transition"
           >
             Disable 2FA
           </button>

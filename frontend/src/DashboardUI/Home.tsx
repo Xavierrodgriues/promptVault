@@ -1,4 +1,3 @@
-import { Mail, MessageSquare } from "lucide-react";
 import Calendar from "../componenet/Calender";
 import Clock from "../componenet/Clock";
 import { useNavigate } from "react-router";
@@ -77,12 +76,7 @@ const Home = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl lg:text-2xl font-bold">Dashboard</h1>
         <div className="flex items-center gap-4">
-          <button className="p-2 bg-white rounded-full shadow">
-            <Mail size={18} />
-          </button>
-          <button className="p-2 bg-white rounded-full shadow">
-            <MessageSquare size={18} />
-          </button>
+          
           <div className="flex items-center gap-2 cursor-context-menu">
             <img
               src="https://api.dicebear.com/7.x/identicon/svg"
@@ -103,7 +97,7 @@ const Home = () => {
             <div className="max-w-md cursor-context-menu">
               <h2 className="text-lg font-semibold mb-2">Hello {user.username}!</h2>
               <p className="mb-4 text-sm">
-                Have you stored your prompt today? If not, then what are you waiting for, go lock something amazing
+                Have you stored your prompt today? If not, then what are you waiting for, go lock something amazing !
               </p>
               <button onClick={() => navigate("/dashboard/prompt-editor")} className={`bg-yellow-300 cursor-pointer hover:bg-yellow-400 ${textTheme} font-semibold px-4 py-2 rounded-md`}>
                 Add Prompt
