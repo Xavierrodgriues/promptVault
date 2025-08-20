@@ -18,7 +18,7 @@ const ChangeTheme = () => {
     <div className="bg-white shadow-md w-full rounded-2xl p-6">
       <h2 className="text-lg font-semibold mb-4">Change Theme</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
         {themes.map((theme) => (
           <button
             key={theme.id}
@@ -30,7 +30,7 @@ const ChangeTheme = () => {
               setHoverTheme(theme.hoverTheme);
               setTextTheme(theme.textTheme);
             }}
-            className="relative w-40 h-28 rounded-xl overflow-hidden shadow-sm border border-gray-200
+            className="relative w-30 h-28 md:w-20 md:h-18 lg:w-30 lg:h-18 rounded-xl overflow-hidden shadow-sm border border-gray-200
                        hover:scale-105 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500
                        transition transform duration-200"
           >

@@ -17,7 +17,7 @@ export default function PromptEditor() {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e:  ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -26,7 +26,11 @@ export default function PromptEditor() {
     setLoading(true);
 
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_ENDPOINT}prompt/add`, form, { withCredentials: true });
+      await axios.post(
+        `${import.meta.env.VITE_BACKEND_ENDPOINT}prompt/add`,
+        form,
+        { withCredentials: true }
+      );
       toast.success("Prompt saved!");
       setForm({ title: "", promptText: "", category: categories[0], type: types[0] });
     } catch (err) {
@@ -52,7 +56,8 @@ export default function PromptEditor() {
             onChange={handleChange}
             placeholder="Enter prompt title"
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={loading}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100"
           />
         </div>
 
@@ -66,7 +71,8 @@ export default function PromptEditor() {
             placeholder="Write your prompt here..."
             rows={6}
             required
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={loading}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100"
           />
         </div>
 
@@ -77,7 +83,8 @@ export default function PromptEditor() {
             name="category"
             value={form.category}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={loading}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100"
           >
             {categories.map((cat) => (
               <option key={cat} value={cat}>{cat}</option>
@@ -92,7 +99,8 @@ export default function PromptEditor() {
             name="type"
             value={form.type}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            disabled={loading}
+            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-100"
           >
             {types.map((t) => (
               <option key={t} value={t}>{t}</option>
@@ -104,7 +112,7 @@ export default function PromptEditor() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-semibold px-5 py-2 rounded-md shadow-sm transition"
+          className="bg-yellow-400 hover:bg-yellow-500 text-indigo-900 font-semibold px-5 py-2 rounded-md shadow-sm transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {loading ? "Saving..." : "Save Prompt"}
         </button>

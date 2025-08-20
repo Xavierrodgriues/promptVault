@@ -97,7 +97,7 @@ const Home = () => {
             <div className="max-w-md cursor-context-menu">
               <h2 className="text-lg font-semibold mb-2">Hello {user.username}!</h2>
               <p className="mb-4 text-sm">
-                Have you stored your prompt today? If not, then what are you waiting for, go lock something amazing !
+                Have you stored your prompt today? If not, then <br /> what are you waiting for, go lock something amazing !
               </p>
               <button onClick={() => navigate("/dashboard/prompt-editor")} className={`bg-yellow-300 cursor-pointer hover:bg-yellow-400 ${textTheme} font-semibold px-4 py-2 rounded-md`}>
                 Add Prompt
