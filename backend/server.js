@@ -14,9 +14,9 @@ app.use(cors({
     credentials: true,
 }));
 
+app.use(cookieParser());
 
 app.use(express.json());
-app.use(cookieParser());
 app.use("/auth", authRouter);
 app.use("/",promptRouter);
 app.use("/settings", settingsRouter);
