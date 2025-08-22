@@ -8,9 +8,9 @@ const promptRouter = require("./src/routes/prompt.route");
 const cors = require("cors");
 const settingsRouter = require("./src/routes/settings.route");
 const reportsROuter = require("./src/routes/report.route");
-
+const PORT = process.env.PORT || 3000;
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_ENDPOINT,
     credentials: true,
 }));
 
@@ -23,6 +23,6 @@ app.use("/settings", settingsRouter);
 app.use("/", reportsROuter);
 
 dbConnection();
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log("Server listening");
 });
