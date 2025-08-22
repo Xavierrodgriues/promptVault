@@ -9,7 +9,7 @@ import {
   DamIcon,
   X,
 } from "lucide-react";
-import { NavLink, useNavigate } from "react-router"; // use react-router-dom here
+import { NavLink, useNavigate } from "react-router-dom"; // use react-router-dom here
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useTheme } from "../context/ThemeContext";

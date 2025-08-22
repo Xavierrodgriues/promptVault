@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes } from "react-router-dom";
 import AuthForm from "./componenet/AuthForm";
 import DashBoard from "./componenet/DashBoard";
 import ProtectedRoute from "./componenet/ProtectedRoute";

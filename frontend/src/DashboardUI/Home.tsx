@@ -1,6 +1,6 @@
 import Calendar from "../componenet/Calender";
 import Clock from "../componenet/Clock";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
