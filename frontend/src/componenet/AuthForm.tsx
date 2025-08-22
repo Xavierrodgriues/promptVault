@@ -28,8 +28,10 @@ const AuthForm = () => {
         toast.info("Enter your 2FA code");
       } else if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message || "Error occurred");
+      } else if (error instanceof Error) {
+        toast.error(error.message);
       } else {
-        toast.error(error);
+        toast.error("An unknown error occurred");
       }
     }
   };
