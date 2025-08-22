@@ -29,7 +29,7 @@ const AuthForm = () => {
       } else if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message || "Error occurred");
       } else {
-        toast.error("Network error");
+        toast.error(error);
       }
     }
   };
