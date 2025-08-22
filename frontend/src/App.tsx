@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import AuthForm from "./componenet/AuthForm";
 import DashBoard from "./componenet/DashBoard";
+import ProtectedRoute from "./componenet/ProtectedRoute";
 import TagSearch from "./DashboardUI/TagSearch";
 import Home from "./DashboardUI/Home";
 import { ToastContainer } from "react-toastify";
@@ -22,9 +23,9 @@ const App = () => {
       <Route
         path="/dashboard"
         element={
-          
+          <ProtectedRoute>
             <DashBoard />
-       
+          </ProtectedRoute>
         }
       >
         {/* Default Dashboard Content */}
