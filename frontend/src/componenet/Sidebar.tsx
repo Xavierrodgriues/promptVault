@@ -95,7 +95,7 @@ const Sidebar = () => {
         {/* Logo & Close */}
         <div className="flex items-center justify-between p-5 font-bold text-lg tracking-wide">
           <span>
-            Tuga's <span className="text-yellow-300">App</span>
+            Prompt <span className="text-yellow-300">Vault</span>
           </span>
           <button className="lg:hidden" onClick={() => setIsOpen(false)}>
             <X size={20} />
