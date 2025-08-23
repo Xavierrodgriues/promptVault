@@ -14,16 +14,18 @@ const registerController = async (req, res) => {
       return res.json({ message: "Invalid Credentials" });
     }
 
-    const existingUser = await userModal.findOne({email});
+    const existingUser = await userModal.findOne({ email });
 
-    if(existingUser){
-        return res.status(400).json({
-            message: "Email already Registered"
-        })
+    if (existingUser) {
+      return res.status(400).json({
+        message: "Email already Registered",
+      });
     }
 
     if (password.length < 5) {
-      return res.status(400).json({ message: "Password must be at least 5 characters long" });
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 5 characters long" });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -36,12 +38,19 @@ const registerController = async (req, res) => {
 
     await user.save();
 
+    res.cookie("token", jwtToken, {
+      httpOnly: true, // cannot be accessed by JS
+      secure: true, // required for HTTPS (Render uses HTTPS)
+      sameSite: "None", // allow cross-origin
+      maxAge: 24 * 60 * 60 * 1000, // optional: 1 day
+    });
+
     res.json({
       message: "User Created",
       data: user,
     });
   } catch (err) {
-    res.json({message: err.message});
+    res.json({ message: err.message });
   }
 };
 
@@ -54,7 +63,8 @@ const loginController = async (req, res) => {
     if (!user) return res.status(401).json({ message: "User does not exist" });
 
     const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) return res.status(401).json({ message: "Incorrect password" });
+    if (!passwordMatch)
+      return res.status(401).json({ message: "Incorrect password" });
 
     // If 2FA is enabled → check OTP
     if (user.twoFactorEnabled) {
@@ -76,11 +86,11 @@ const loginController = async (req, res) => {
     // ✅ If password + (2FA if enabled) are correct
     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
     res.cookie("token", jwtToken, {
-  httpOnly: true,    // cannot be accessed by JS
-  secure: true,      // required for HTTPS (Render uses HTTPS)
-  sameSite: "None",  // allow cross-origin
-  maxAge: 24 * 60 * 60 * 1000 // optional: 1 day
-});
+      httpOnly: true, // cannot be accessed by JS
+      secure: true, // required for HTTPS (Render uses HTTPS)
+      sameSite: "None", // allow cross-origin
+      maxAge: 24 * 60 * 60 * 1000, // optional: 1 day
+    });
 
     // Don’t send sensitive fields like password or secret
     res.json({
@@ -98,11 +108,10 @@ const loginController = async (req, res) => {
   }
 };
 
-
 const logoutController = async (req, res) => {
   res.clearCookie("token");
 
   return res.status(200).json({ message: "Logged out successfully" });
-}; 
+};
 
 module.exports = { registerController, loginController, logoutController };
