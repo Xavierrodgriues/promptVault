@@ -8,9 +8,9 @@ import { toast } from "react-toastify";
 const AuthForm = () => {
   const [loginForm, setLoginForm] = useState(true);
   const [require2FA, setRequire2FA] = useState(false);
+  const [loading, setLoading] = useState(false); // 🔥 fixed: default false
   const { register, handleSubmit, reset } = useForm();
   const navigate = useNavigate();
-  const [loader, setLoader] = useState(true);
 
   const onSubmit = async (data: object) => {
     const url = loginForm
@@ -18,15 +18,18 @@ const AuthForm = () => {
       : `${import.meta.env.VITE_BACKEND_ENDPOINT}auth/register`;
 
     try {
+      setLoading(true); // start loader
       const response = await axios.post(url, data, { withCredentials: true });
-      setLoader(false);
 
       toast.success(response.data.message);
       localStorage.setItem("user", JSON.stringify(response.data.data));
       navigate("/dashboard");
     } catch (error: unknown) {
-      if (axios.isAxiosError(error) && error.response?.status === 403 && error.response.data.message === "2FA token required") {
-        // Backend says password correct but need OTP
+      if (
+        axios.isAxiosError(error) &&
+        error.response?.status === 403 &&
+        error.response.data.message === "2FA token required"
+      ) {
         setRequire2FA(true);
         toast.info("Enter your 2FA code");
       } else if (axios.isAxiosError(error) && error.response) {
@@ -36,6 +39,8 @@ const AuthForm = () => {
       } else {
         toast.error("An unknown error occurred");
       }
+    } finally {
+      setLoading(false); // stop loader
     }
   };
 
@@ -47,7 +52,6 @@ const AuthForm = () => {
           <h1 className="text-3xl text-center pt-4">Welcome to the App!</h1>
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <div className="flex flex-col gap-4">
-              {/* Registration needs username */}
               {!loginForm && (
                 <input
                   type="text"
@@ -71,7 +75,6 @@ const AuthForm = () => {
                 className="border border-black h-10 rounded-2xl pl-4"
               />
 
-              {/* If backend requires OTP, show OTP input */}
               {require2FA && (
                 <input
                   type="text"
@@ -83,8 +86,18 @@ const AuthForm = () => {
             </div>
 
             <div className="flex flex-col gap-4 items-center justify-center mt-5 bg-black text-white h-10 rounded-2xl">
-              <button type="submit" className="cursor-pointer h-full w-full">
-                {loader ? <Loader /> : loginForm ? (require2FA ? "Verify 2FA" : "Login") : "Register"}
+              <button
+                type="submit"
+                disabled={loading}
+                className="cursor-pointer h-full w-full flex items-center justify-center"
+              >
+                {loading ? (
+                  <Loader className="w-5 h-5 animate-spin" />
+                ) : loginForm ? (
+                  require2FA ? "Verify 2FA" : "Login"
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
 
@@ -99,7 +112,7 @@ const AuthForm = () => {
                 }}
                 className="cursor-pointer text-gray-500"
               >
-                {loader ? <Loader /> : loginForm ? "Register Now" : "Login" }
+                {loginForm ? "Register Now" : "Login"}
               </button>
             </div>
           </form>
