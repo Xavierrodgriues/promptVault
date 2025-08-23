@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Loader } from "lucide-react";
+import { Loader } from "lucide-react"; // spinner icon
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 const AuthForm = () => {
   const [loginForm, setLoginForm] = useState(true);
   const [require2FA, setRequire2FA] = useState(false);
-  const [loading, setLoading] = useState(false); // 🔥 fixed: default false
+  const [loading, setLoading] = useState(false); // 🔥 added loading state
   const { register, handleSubmit, reset } = useForm();
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ const AuthForm = () => {
         toast.error("An unknown error occurred");
       }
     } finally {
-      setLoading(false); // stop loader
+      setLoading(false); // stop loader after response/error
     }
   };
 
@@ -58,6 +58,7 @@ const AuthForm = () => {
                   {...register("username", { required: true })}
                   placeholder="Username"
                   className="border border-black h-10 rounded-2xl pl-4"
+                  disabled={loading}
                 />
               )}
 
@@ -66,6 +67,7 @@ const AuthForm = () => {
                 {...register("email", { required: true })}
                 placeholder="Email"
                 className="border border-black h-10 rounded-2xl pl-4"
+                disabled={loading}
               />
 
               <input
@@ -73,6 +75,7 @@ const AuthForm = () => {
                 {...register("password", { required: true })}
                 placeholder="Password"
                 className="border border-black h-10 rounded-2xl pl-4"
+                disabled={loading}
               />
 
               {require2FA && (
@@ -81,6 +84,7 @@ const AuthForm = () => {
                   {...register("token", { required: true })}
                   placeholder="Enter 2FA Code"
                   className="border border-black h-10 rounded-2xl pl-4"
+                  disabled={loading}
                 />
               )}
             </div>
@@ -89,10 +93,10 @@ const AuthForm = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="cursor-pointer h-full w-full flex items-center justify-center"
+                className="cursor-pointer h-full w-full flex items-center justify-center disabled:opacity-50"
               >
                 {loading ? (
-                  <Loader className="w-5 h-5 animate-spin" />
+                  <Loader className="animate-spin w-5 h-5" />
                 ) : loginForm ? (
                   require2FA ? "Verify 2FA" : "Login"
                 ) : (
@@ -105,12 +109,13 @@ const AuthForm = () => {
               {loginForm ? "Not a member?" : "Already have an account?"}{" "}
               <button
                 type="button"
+                disabled={loading}
                 onClick={() => {
                   setLoginForm((prev) => !prev);
                   setRequire2FA(false);
                   reset();
                 }}
-                className="cursor-pointer text-gray-500"
+                className="cursor-pointer text-gray-500 disabled:opacity-50"
               >
                 {loginForm ? "Register Now" : "Login"}
               </button>
