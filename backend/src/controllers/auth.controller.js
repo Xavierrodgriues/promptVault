@@ -38,6 +38,8 @@ const registerController = async (req, res) => {
 
     await user.save();
 
+     const jwtToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+
     res.cookie("token", jwtToken, {
       httpOnly: true, // cannot be accessed by JS
       secure: true, // required for HTTPS (Render uses HTTPS)
