@@ -84,8 +84,8 @@ const TagSearch = () => {
         </div>
       ) : prompts.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-[80vh]">
-          <img className="w-full h-full hidden md:block" src="../../public/Page_Not_Found_Illustration_high_resolution_preview_1649340.jpg" alt="" />
-          <p className="text-red-500">No prompt found</p>
+          <img className="w-full h-full hidden md:block" src="https://ik.imagekit.io/wr6ziyjiu/Page_Not_Found_Illustration_high_resolution_preview_1649340.jpg?updatedAt=1755925080386" alt="" />
+          {/* <p className="text-red-500">No prompt found</p> */}
         </div>
       ) : (
         <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-4">
